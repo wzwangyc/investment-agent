@@ -1,0 +1,50 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# 输出文件（保留目录，不保留具体文件）
+outputs/*.html
+outputs/*.json
+outputs/*.png
+outputs/*.jpg
+
+# 系统文件
+.DS_Store
+Thumbs.db
+
+# 敏感信息
+.env
+*.key
+*.pem
+config.local.py
