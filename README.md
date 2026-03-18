@@ -2,11 +2,12 @@
 
 ## 🎯 项目概述
 
-基于 **Claude Code Agent 框架**的投资学 Agent，实现 6 种经典投资策略的自动化分析与可视化。
-
 **课程：** 投资学 Agents  
 **团队：** Leo's Team  
-**日期：** 2026 年 3 月  
+**日期：** 2026 年 3 月
+
+基于 **Claude Code Agent 框架**的投资学 Agent，实现 6 种经典投资策略的自动化分析与可视化。
+
 **GitHub：** https://github.com/wzwangyc/investment-agent
 
 ---
