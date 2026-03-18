@@ -9,14 +9,14 @@ Intelligent Investment Portfolio Optimization & Analysis Agent
 日期：2026-03
 
 功能：
-1. 数据获取（akshare）- 仅国内可用 API
+1. 数据获取（akshare 为主，efinance 备用）- 仅国内可用 API
 2. 投资组合优化计算（马科维茨均值 - 方差模型）
 3. 财务指标解读与分析
 4. 可视化输出（有效前沿、资产配置饼图、收益对比）
 5. 自然语言交互界面
 
 依赖：
-pip install akshare pandas numpy matplotlib plotly scipy
+pip install akshare efinance pandas numpy matplotlib plotly scipy
 """
 
 import akshare as ak
@@ -93,32 +93,44 @@ class DataFetcher:
             if not start_date:
                 start_date = (datetime.now() - timedelta(days=365)).strftime("%Y%m%d")
             
-            # 使用 akshare 获取 A 股历史行情
-            df = ak.stock_zh_a_hist(
-                symbol=stock_code,
-                period="daily",
-                start_date=start_date,
-                end_date=end_date,
-                adjust=adjust
-            )
+            # 方案 1：akshare（主要）
+            try:
+                df = ak.stock_zh_a_hist(
+                    symbol=stock_code,
+                    period="daily",
+                    start_date=start_date,
+                    end_date=end_date,
+                    adjust=adjust
+                )
+                print(f"[API] akshare - 获取 {stock_code} 成功，共 {len(df)} 条记录")
+            except Exception as ak_error:
+                print(f"[WARNING] akshare 失败：{ak_error}")
+                print(f"[INFO] 尝试使用 efinance 作为备用...")
+                
+                # 方案 2：efinance（备用）
+                from efinance import stock
+                df = stock.get_quote_history(
+                    stock_code,
+                    beg=start_date,
+                    end=end_date
+                )
+                # 重命名列以匹配 akshare 格式
+                df = df.rename(columns={
+                    '日期': 'date',
+                    '收盘': 'close',
+                    '开盘': 'open',
+                    '最高': 'high',
+                    '最低': 'low',
+                    '成交量': 'volume',
+                    '成交额': 'amount'
+                })
+                print(f"[API] efinance - 获取 {stock_code} 成功，共 {len(df)} 条记录")
             
-            # 重命名列
-            df = df.rename(columns={
-                '日期': 'date',
-                '开盘': 'open',
-                '收盘': 'close',
-                '最高': 'high',
-                '最低': 'low',
-                '成交量': 'volume',
-                '成交额': 'amount'
-            })
-            
+            # 统一处理
             df['date'] = pd.to_datetime(df['date'])
             df = df.set_index('date')
             
             self.cache[cache_key] = df
-            print(f"[API] 东方财富/akshare - 获取 {stock_code} 成功，共 {len(df)} 条记录")
-            
             return df
             
         except Exception as e:
