@@ -9,7 +9,7 @@ Intelligent Investment Portfolio Optimization & Analysis Agent
 日期：2026-03
 
 功能：
-1. 多 API 数据获取（东方财富、akshare）- 仅国内可用 API
+1. 数据获取（akshare）- 仅国内可用 API
 2. 投资组合优化计算（马科维茨均值 - 方差模型）
 3. 财务指标解读与分析
 4. 可视化输出（有效前沿、资产配置饼图、收益对比）
